@@ -23,10 +23,12 @@ public class Status : MonoBehaviour
     public TMP_Text textIntelligence;
     
     private PlayerManager playerManager;
+    private Character character;
 
     void Start()
     {
         playerManager = GetComponent<PlayerManager>();
+        character = GetComponent<Character>();
         UiStatus.SetActive(false);
     }
     
@@ -92,6 +94,15 @@ public class Status : MonoBehaviour
                 Debug.LogWarning("Invalid upgrade type");
                 break;
         }
+
+        if (character.skillPoint <= 0)
+        {
+            for (int i = 0; i < character.upStatus.Length; i++)
+            {
+                character.upStatus[i].SetActive(false);
+            }
+        }
+        OpenUiStatus();
     }
     
     public void ResetHealth()

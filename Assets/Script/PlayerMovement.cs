@@ -359,17 +359,14 @@ public class PlayerMovement : MonoBehaviour
             case 1:
                 animator.SetTrigger("Attack1");
                 audioSourceCombat.PlayOneShot(attackSound1);
-                StartCoroutine(OnHit(0.2f));
                 break;
             case 2:
                 animator.SetTrigger("Attack2");
                 audioSourceCombat.PlayOneShot(attackSound1);
-                StartCoroutine(OnHit(0.2f));
                 break;
             case 3:
                 animator.SetTrigger("Attack3");
                 audioSourceCombat.PlayOneShot(attackSound2);
-                StartCoroutine(OnHit(0.2f));
                 break;
         }
     }
@@ -433,6 +430,7 @@ public class PlayerMovement : MonoBehaviour
             
             Vector2 knockbackDirection = (transform.position - enemy.transform.position).normalized;
             enemy.TakeDamage(playerStatus.strength, knockbackDirection);
+            StartCoroutine(OnHit(0.2f));
         }
     }
     
@@ -461,6 +459,7 @@ public class PlayerMovement : MonoBehaviour
             
             Vector2 knockbackDirection = (transform.position - enemy.transform.position).normalized;
             enemy.TakeDamage(playerStatus.strength, knockbackDirection);
+            StartCoroutine(OnHit(0.2f));
         }
     }
     

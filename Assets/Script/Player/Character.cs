@@ -2,42 +2,57 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Character : MonoBehaviour
 {
+    public TMP_Text levelText;
     public int level = 1;
+    public int skillPoint = 0;
     public int experience;
     
     public int baseXP = 100;
     public float levelMultiplier = 1.5f;
-    public int maxLevel = 100;
-    //public int experienceToLevelUp;
+    public int maxLevel = 10;
+    public EquipmentUI[] equipmentUI;
+    public GameObject[] upStatus;
+
+    public Dictionary<EquipmentType, Equipment> equippedItems = new Dictionary<EquipmentType, Equipment>();
     
     private Dictionary<int, int> experienceToLevelUp = new Dictionary<int, int>();
-
-    public Dictionary<EquipmentType, Equipment> equippedItems;
-    
     private Status status;
+    private Equipment equipment;
 
     void Start()
     {
         status = GetComponent<Status>();
         experience = 0;
-        equippedItems = new Dictionary<EquipmentType, Equipment>();
-        CalculateExperienceToLevelUp(50);
+        CalculateExperienceToLevelUp(maxLevel);
+        UpdateTextLevel();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.I))
         {
             AddExperience(50);
         }
+        
+        if (Input.GetKeyDown(KeyCode.E) && equipment != null)
+        {
+            AddEquipment(equipment);
+            Destroy(equipment.gameObject);
+            equipment = null;
+        }
+    }
+
+    private void UpdateTextLevel()
+    {
+        levelText.text = "Lvl." + level.ToString();
     }
     
     public void CalculateExperienceToLevelUp(int maxLevel)
     {
-        //experienceToLevelUp = Mathf.FloorToInt(baseXP * Mathf.Pow(level, levelMultiplier));
         experienceToLevelUp.Clear();
 
         for (int i = 1; i <= maxLevel; i++)
@@ -47,28 +62,25 @@ public class Character : MonoBehaviour
         }
     }
     
-    public void Upgrade()
-    {
-        level++;
-    }
-    
     public void AddExperience(int exp)
     {
         experience += exp;
-        
-        /*while (experience >= experienceToLevelUp && level < maxLevel)
-        {
-            experience -= experienceToLevelUp;
-            level++;
-            CalculateExperienceToLevelUp();
-            OnLevelUp();
-        }*/
 
         while (experience >= experienceToLevelUp[level] && level < experienceToLevelUp.Count)
         {
             experience -= experienceToLevelUp[level];
             level++;
+            
+            skillPoint++;
+            
             OnLevelUp();
+            
+            for (int i = 0; i < upStatus.Length; i++)
+            {
+                upStatus[i].SetActive(true);
+            }
+
+            UpdateTextLevel();
         }
     }
 
@@ -82,15 +94,39 @@ public class Character : MonoBehaviour
         {
             equippedItems.Add(equipment.type, equipment);
         }
+
+        for (int i = 0; i < equipmentUI.Length; i++)
+        {
+            equipmentUI[i].UpdateEquipmentUI(equipment);
+            Debug.Log(equipment.type);
+        }
     }
     
     public void OnLevelUp()
     {
         Debug.Log("leveled up to level " + level);
-
+        
         for (int i = 0; i < 5; i++)
         {
             status.UpgradeStatus(i);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Equipment eq = other.GetComponent<Equipment>();
+        if (eq != null)
+        {
+            equipment = eq;
+        }
+    }
+    
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        Equipment eq = other.GetComponent<Equipment>();
+        if (eq != null)
+        {
+            eq = null;
         }
     }
 }

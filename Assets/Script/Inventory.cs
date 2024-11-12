@@ -12,11 +12,13 @@ public class Inventory : MonoBehaviour
     public Text testInventory;
     
     private PlayerManager playerManager;
+    private Status status;
     private int maxItems;
     
     private void Start()
     {
         playerManager = GetComponent<PlayerManager>();
+        status = GetComponent<Status>();
         maxItems = itemSlots.Length;
     }
 
@@ -65,7 +67,7 @@ public class Inventory : MonoBehaviour
             {
                 if (item.itemName == "HP")
                 {
-                    playerManager.currentHealth += 10;
+                    status.health += 35;
                 }
                 
                 item.quantity--;
