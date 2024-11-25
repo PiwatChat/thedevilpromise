@@ -13,6 +13,7 @@ public class Status : MonoBehaviour
     public int strength;
     public int agility;
     public int intelligence;
+    public bool openUIStatus = false;
     
     public GameObject UiStatus;
 
@@ -46,6 +47,7 @@ public class Status : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
+            openUIStatus = !openUIStatus;
             UiStatus.SetActive(!UiStatus.activeSelf);
             OpenUiStatus();
         }

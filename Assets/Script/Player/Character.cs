@@ -22,6 +22,7 @@ public class Character : MonoBehaviour
     private Dictionary<int, int> experienceToLevelUp = new Dictionary<int, int>();
     private Status status;
     private Equipment equipment;
+    public EquInventory equInventory;
 
     void Start()
     {
@@ -40,7 +41,7 @@ public class Character : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.E) && equipment != null)
         {
-            AddEquipment(equipment);
+            equInventory.AddEquipment(equipment);
             Destroy(equipment.gameObject);
             equipment = null;
         }
@@ -86,20 +87,39 @@ public class Character : MonoBehaviour
 
     public void AddEquipment(Equipment equipment)
     {
-        if (equippedItems.ContainsKey(equipment.type))
+        /*if (equippedItems.ContainsKey(equipment.type))
         {
+            Debug.Log(equipment.type);
+            equInventory.AddEquipment(equippedItems[equipment.type]);
             equippedItems[equipment.type] = equipment;
         }
         else
         {
             equippedItems.Add(equipment.type, equipment);
+        }*/
+        
+        if (equippedItems.ContainsKey(equipment.type))
+        {
+            Equipment oldEquipment = equippedItems[equipment.type];
+            UpdateStatus(-oldEquipment.attackPower, -oldEquipment.defensePower);
+        
+            equInventory.AddEquipment(oldEquipment);
         }
+
+        equippedItems[equipment.type] = equipment;
+        UpdateStatus(equipment.attackPower, equipment.defensePower);
 
         for (int i = 0; i < equipmentUI.Length; i++)
         {
             equipmentUI[i].UpdateEquipmentUI(equipment);
             Debug.Log(equipment.type);
         }
+    }
+    
+    private void UpdateStatus(int attackPower, int defensePower)
+    {
+        status.strength += attackPower;
+        status.intelligence += defensePower;
     }
     
     public void OnLevelUp()

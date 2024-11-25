@@ -112,7 +112,7 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(Dash());
         }
         
-        if (Input.GetMouseButtonDown(0) && canAttack)
+        if (Input.GetMouseButtonDown(0) && canAttack && !playerStatus.openUIStatus)
         {
             StartCoroutine(CooldownAttack());
         }
