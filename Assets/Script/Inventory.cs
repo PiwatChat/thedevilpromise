@@ -65,7 +65,7 @@ public class Inventory : MonoBehaviour
             
             if (item.quantity > 0)
             {
-                if (item.itemName == "HP")
+                if (item.itemName == "HP" && status.health < status.maxHealth)
                 {
                     status.health += 35;
                 }

@@ -11,19 +11,24 @@ public class EnemyBoss : MonoBehaviour
     public LayerMask playerLayer;
     public bool hitPlayer = true;
     public bool isHit = true;
+    public int exp = 100;
     
     public float damage = 10f;
     public float RangeDamge = 30f;
     public Animator animator;
+    public string qusetname;
 
     private EnemyBossAi enemy;
     private Rigidbody2D rb;
+    private Character character;
+    private QuestManager questManager;
 
-    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         enemy = GetComponent<EnemyBossAi>();
+        character = FindObjectOfType<Character>();
+        questManager = FindObjectOfType<QuestManager>();
     }
 
     public void TakeDamage(float damage, Vector2 knockbackDirection)
@@ -38,7 +43,6 @@ public class EnemyBoss : MonoBehaviour
         }
         else
         {
-            
             enemy.Knockback(knockbackDirection);
             StartCoroutine(HandleHit());
         }
@@ -55,6 +59,8 @@ public class EnemyBoss : MonoBehaviour
         enemy.enabled = false;
         rb.velocity = Vector2.zero;
         yield return new WaitForSeconds(1.5f);
+        questManager.UpdateQuest(qusetname, 1);
+        character.AddExperience(exp);
         Destroy(gameObject);
     }
 

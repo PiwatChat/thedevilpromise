@@ -14,15 +14,21 @@ public class Enemy : MonoBehaviour
     public bool hitPlayer = true;
     public bool isHit = true;
     public float damage = 10f;
+    public int exp = 25;
     public Animator animator;
+    public string qusetname;
     
     private EnemyAI enemy;
     private Rigidbody2D rb;
+    private Character character;
+    private QuestManager questManager;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         enemy = GetComponent<EnemyAI>();
+        character = FindObjectOfType<Character>();
+        questManager = FindObjectOfType<QuestManager>();
     }
 
     public void TakeDamage(float damage, Vector2 knockbackDirection)
@@ -55,6 +61,8 @@ public class Enemy : MonoBehaviour
         enemy.enabled = false;
         rb.velocity = Vector2.zero;
         yield return new WaitForSeconds(1.5f);
+        character.AddExperience(exp);
+        questManager.UpdateQuest(qusetname, 1);
         Destroy(gameObject);
     }
     
