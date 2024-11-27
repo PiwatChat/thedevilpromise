@@ -16,7 +16,7 @@ public class TakeDamge : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
-            playerManager.TakeDamage(1000f, knockbackDirection);
+            playerManager.TakeDamage(100f, knockbackDirection);
         }
     }
 }
