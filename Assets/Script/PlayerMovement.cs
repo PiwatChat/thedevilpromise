@@ -309,8 +309,8 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator OnHit(float cd)
     {
-        yield return new WaitForSeconds(cd);
-        HitStop.Stop(0.15f);
+        yield return new WaitForSecondsRealtime(cd);
+        //HitStop.Stop(0.15f);
     }
     
     private void HeavyAttack()
@@ -415,7 +415,7 @@ public class PlayerMovement : MonoBehaviour
                 yield break;
             }
             Vector2 knockbackDirection = (transform.position - enemy.transform.position).normalized;
-            HitStop.Stop(0f);
+            //HitStop.Stop(0f);
             enemy.TakeDamage(playerStatus.strength + 15, knockbackDirection);
             isHeavyAttacking = false;
             yield break;
@@ -444,7 +444,7 @@ public class PlayerMovement : MonoBehaviour
                 yield break;
             }
             Vector2 knockbackDirection = (transform.position - enemy.transform.position).normalized;
-            HitStop.Stop(0f);
+            //HitStop.Stop(0f);
             enemy.TakeDamage(playerStatus.strength + 15, knockbackDirection);
             isHeavyAttacking = false;
             yield break;
