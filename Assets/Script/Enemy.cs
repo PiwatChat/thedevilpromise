@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -106,5 +106,21 @@ public class Enemy : MonoBehaviour
         isHit = false;
         yield return new WaitForSeconds(1.5f);
         isHit = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player")) // ตรวจสอบว่าเป็น Player หรือไม่
+        {
+            BuffDebuffManager playerDebuffManager = collision.GetComponent<BuffDebuffManager>();
+
+            if (playerDebuffManager != null)
+            {
+                
+                playerDebuffManager.ApplyDebuff(DebuffType.Poison); 
+                //playerDebuffManager.ApplyDebuff(DebuffType.Weakness);
+                //playerDebuffManager.ApplyDebuff(DebuffType.Slow);
+            }
+        }
     }
 }
